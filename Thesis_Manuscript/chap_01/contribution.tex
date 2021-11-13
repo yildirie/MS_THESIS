@@ -1,0 +1,13 @@
+\section{Contributions and Outline of the Thesis}
+\label{sec:contribution}
+
+The main contributions of this work can be summarized as follows:
+
+\begin{itemize}
+  \item For PINNs, there is no need to have a huge amount of data that is required in other deep neural networks (DNNs) based inversion approaches conducted in a supervised manner. Therefore, using PINNs is computationally cheap as one has not to generate lots of feature-label pairs (velocity models and the traveltimes).
+  \item Successful implementations of traditional gradient-based inversion frameworks strongly depend on initial models. Starting velocities far away from the solution may cause an algorithm to trap to local minima. PINN inversion does not depend on an initial model.
+  \item Contrary to the conventional approaches (finite difference, finite elements), PINN methodology is mesh-free, which can be useful when handling complex computational boundaries, such as models having irregular topography.
+  \item In a non-linear optimization setting, traveltime tomography may suffer from unwanted velocity estimates because of the contradicting information in its gradient for different shots. As PINN learning is based on training DNNs, this can be avoided.
+\end{itemize}
+
+This thesis is organized as follows. This thesis is organized as follows. In Chapter 2, a brief summary of traveltime tomography problem and background for PINNs, are given. Implementation of synthetic examples and corresponding results are provided in Chapter 3. Then, in Chapter 4, I apply the proposed approach to real field data. Finally, in Chapter 5, I summarize the study and touch on possible future extensions of the work.

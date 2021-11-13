@@ -1,0 +1,35 @@
+\section{Motivation and Problem Definition}
+\label{sec:motivation}
+
+Seismology is a scientific discipline dealing with seismic waves propagating through (inside and around) the Earth.
+One of the main objectives of investigating seismic signals is retrieving useful information about the Earth from regional to global scales. 
+For exploration purposes, for example, seismic waves are processed and interpreted for prospecting subsurface resources, such as fossil fuels, geothermal, and minerals.
+While for the global scale it enables us to understand the inner structures of the 
+Earth and provides a crucial understanding of the formation of the planet, tectonic mechanisms as well as earthquakes and volcanos.
+
+In geophysics, the main purpose is mostly to infer some physical properties of the subsurface from observations. 
+The link between these observations and unknown parameters is embedded in a mathematical expression under certain assumptions and approximations. 
+The eikonal equation, which originally appeared on wave and ray optics is a mathematical representation 
+providing a connection between traveltimes and the wavefront propagation velocities.
+It is a non-linear, partial differential equation (PDE) of first-order and belongs to 
+the family of Hamilton-Jacobi equations~\cite{ko:90}. The computation of the traveltimes 
+from the velocity function is needed in 
+many modeling tasks and can be effectively performed by solving the eikonal equation using the 
+Fast Marching Method (FMM) and the Fast Sweeping Method (FSM).
+The former uses a finite-difference operator to track the minimum traveltime with Dijkstra-like sorting and updating~\cite{s:96}; 
+The latter, on the other hand, 
+is a Gauss-Seidel-based iterative 
+method using upwind difference for
+discretization~\cite{z:05}.
+
+Oppositely, predicting the velocity
+field from the traveltimes is an inverse problem and can be solved by a gradient-based 
+optimization with forward and backward propogation of the traveltime fields of the 
+eikonal equation. 
+It means the inversion task is 
+amounts to solving forward and 
+inverse problems consecutively and iteratively. 
+In the forward problem stage, 
+the eikonal equation is solved for traveltimes on rectangular grids with the algorithms I described earlier. While, in the inversion stage, one may try to minimize the objective function, which is the misfit between the observed first arrival times on the receivers and the modeled ones by linearizing the tomography operator. The linearized system is then updated iteratively by employing any gradient-based approaches. This method, however, demands the explicit computation of the Frechet (jacobian matrix) derivatives, which results in high computational costs. To mitigate this issue, the traveltime tomography problem can be solved directly as a non-linear optimization setting utilizing the adjoint state method~\cite{lq:06,p:06}. Though this non-linear optimization approach avoids the explicit computation of Frechet derivatives, its gradient may ignore some information available along the shot dimension, which can be resulted in undesired velocity estimations~\cite{lvf:13}.
+
+Physics informed neural networks (PINNs)~\cite{rpk:19}, which combine the underlying physics of a tackled problem with deep learning (DL) have recently emerged as a powerful tool for solving both forward and inverse problems. This neural network (NN) aided approximators capable of considering physics are effective and efficient for ill-posed inverse problems~\cite{kklpwy:21}. Therefore, in this thesis, I approach the traveltime tomography problem in a novel way leveraging PINNs.
