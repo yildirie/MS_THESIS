@@ -1,2 +1,118 @@
-\section{Traveltime Tomography}
+\section{Eikonal Equation Based Traveltime Tomography }
 \label{sec:traveltime_tomo}
+\subsection{Eikonal Equation}
+In an acoustic constant density media, seismic waves with a wave speed of $v$ propagate according to the following equation:
+\begin{equation}
+    \label{eqn:wave_eqn}
+    \nabla^2\psi-\frac{1}{v^2}\frac{\partial^2\psi }{\partial t^2}  = \delta(x-x_s)f(t),
+\end{equation}
+where $\nabla^2$ is the Laplace operator; $\psi$ is the scalar acoustic pressure; $x_s$ is the point source location, and $f(t)$ denotes the source wavelet. For high frequencies, WKB (Wentzel–Kramers–Brillouin) expansion reduces to the following asymptotic approximation, which satisfies the \eqref{eqn:wave_eqn}.
+\begin{equation}
+    \label{eqn:asymptotic approximation}
+    \psi=A(x)e^{-i \omega T(x)},
+\end{equation}
+where, $\omega$ is the angular frequency; $T(x)$ is a phase function (traveltime), and $A(x)$ is the amplitude coefficient of the oscillatory function. Applying the divergence of the gradient to the geometric optics approximation of the wave equation yields
+\begin{equation}
+\label{eqn:second_derivative}
+\begin{split}
+    \nabla^2\psi &= \nabla^2 A e^{-i \omega T}-i \omega \nabla A \cdot \nabla T e^{-i \omega T} \\&\quad - i \omega \nabla A \cdot \nabla T e^{-i \omega T} \\&\quad - i \omega A \nabla^2 T e^{-i \omega T} \\&\quad - \omega^2 A \nabla T \cdot \nabla T e^{-i \omega T}.
+\end{split}
+\end{equation}
+On the other hand, the second derivative of the solution of the wave equation $\psi$ with respect to time $t$ is given
+\begin{equation}
+    \label{eqn:time_derivative}
+    \frac{\partial^2\psi }{\partial t^2}=-\omega^2 A e^{-i \omega T}.
+\end{equation}
+Plugging the \eqref{eqn:second_derivative} and \eqref{eqn:time_derivative} into the wave equation without including the source term produces 
+\begin{equation}
+    \label{eqn:plugging}
+    \nabla^2 A - \omega^2 A |\nabla T|^2 - i \omega (2 \nabla A \cdot \nabla T + A \nabla^2 T) = \frac{-A \omega^2}{v^2}.
+\end{equation}
+This equation has real and imaginary components. Propagation information comes from the real part
+\begin{equation}
+    \label{eqn:real_part}
+    \nabla^2 A - \omega^2 A |\nabla T|^2 = \frac{-A \omega^2}{v^2}.
+\end{equation}
+Dividing both sides by $A \omega^2$ and applying high frequency approximation by taking the limit as $w \to \infty$ yields the eikonal equation:
+\begin{equation}
+    \label{eqn:eikonal}
+    |\nabla T(x)|^2 = \frac{1}{v^2}.
+\end{equation}
+Additionally, amplitude of the propagating waves comes from the imaginary part
+\begin{equation}
+    \label{eqn:imaginary}
+    2 \omega \nabla A \cdot \nabla T + \omega A \nabla^2 T=0.
+\end{equation}
+Frequency terms are vanished and we end up with the transport equation:
+\begin{equation}
+    \label{eqn:transport_eq}
+    2 \nabla A \cdot \nabla T + A \nabla^2 T=0.
+\end{equation}
+
+\subsection{Tomographic Reconstruction}
+
+Equation \eqref{eqn:eikonal} presents a relation between traveltime and velocity field. Finding a solution in the model space (velocity) from data (traveltime) is called traveltime tomography. More formally, it is a data fitting procedure that can be written as:
+\begin{equation}
+    \label{eqn:data_fitting}
+    \min_{\mathbf{v}}\frac{1}{2}||\mathbf{t}^{\text{pre}}-\mathbf{t}^{\text{obs}}||.
+\end{equation}
+Here the notation $||\cdot||$ denotes the $L_2$ norm taken in Euclidean Space; $\mathbf{t}^\text{pre}$ represents the computed traveltimes from a forward modeling; $\mathbf{t}^\text{obs}$ represents the known traveltimes in the domain of interest. The objective in \eqref{eqn:data_fitting} can be rewritten in terms of the dot product of the residual vector $\mathbf{r}=\mathbf{t}^\text{pre}-\mathbf{t}^\text{obs}$ such that:
+\begin{equation}
+    \label{eqn:residual_vector}
+    \min_{\mathbf{v}}\frac{1}{2}\mathbf{r} \cdot \mathbf{r} .
+\end{equation}
+If we take the derivative of \eqref{eqn:residual_vector} with respect to the model parameters $\mathbf{v}$, we have 
+\begin{equation}
+    \label{eqn:gradient}
+    \frac{1}{2}\frac{\partial}{\partial \mathbf{v}} \mathbf{r} \cdot \mathbf{r} = \mathbf{G}^T \cdot \mathbf{r},
+\end{equation}
+where $\mathbf{G}$ is the Frechét derivative matrix. It is also called the Jacobian matrix and defines the sensitivity of the data residuals with respect to velocity perturbations. This expression gives us the gradient that is needed to update the model parameters. 
+
+The solution of the eikonal equation \eqref{eqn:eikonal} depends on the source location  $x_s$, and has a boundary condition of $T(x_s) = 0$. Hence, if we consider multiple shot case, and take the total number of shot as $Ns$, the total Jacobian matrix will be the concatenation of individual ones
+\begin{equation}
+    \label{eqn:jacobian}
+    \mathbf{G}=\begin{bmatrix} \mathbf{G}_1 & \mathbf{G}_2 & \dots  & \mathbf{G}_{Ns} \end{bmatrix}^T.
+\end{equation}
+Therefore, the total gradient term will be
+\begin{equation}
+    \label{eqn:gradient_term}
+    \mathbf{g}=\sum_{i=1}^{Ns}\mathbf{G}_i^T \cdot \mathbf{r}_i .
+\end{equation}
+where $i$ stands for the $i$th shot. 
+
+More accurate update in the solution space can be accomplished by considering the second derivatives $\mathbf{G}^T\mathbf{G}$, which is known as the Hessian matrix. In this case, the model perturbation is obtained by premultiplying the inverse Hessian with the gradient:
+\begin{equation}
+    \label{eqn:model_perturbation}
+    \delta_\mathbf{v} = \begin{bmatrix} \mathbf{G}^T \mathbf{G}\end{bmatrix}^{-1}\mathbf{g}.
+\end{equation}
+Because larger problems tend to have suffer from computing Hessian matrix, this thesis relies on conjugate search directions for all the conventional tomography implementations. More specifically, the conjugate-direction (CD) ~\cite{c:14} method is chosen as a traditional tool for tomography in the context of this thesis. Algorithm~\ref{alg:algo} summarizes the tomographic reconstruction. 
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
+	\textbf{Input:}{$t^\text{obs}$} (Observed traveltimes)\\
+	$v_0 \leftarrow 0$ (Model Initialization)\\
+	$k \leftarrow 0$ (Step Initialization)\\
+	\While{data residual not converged}{
+	    $t_k^\text{pre} \leftarrow v_k$ (FMM) \\
+	    $r_k  \leftarrow t^\text{obs}-t_k^\text{pre} $\\
+	    $J_k \leftarrow \frac{\partial t_k^\text{pre} }{\partial v_k} $\\
+	    $r \leftarrow r_k$\\
+	    $m \leftarrow v_k$\\
+	    \While{predetermined iteration number is not reached}{
+	    $\Delta m \leftarrow J_k^* r$\\
+	    $\Delta r \leftarrow J_k \Delta m $\\
+	    $(m,r) \leftarrow \text{cgstep}(m, r, \Delta m, \Delta r )$
+	    }
+	    $g_k \leftarrow m$\\
+	    $v_{k+1} \leftarrow v_k + \alpha g_k $\\
+	    $k \leftarrow k+1 $
+	    }
+	\caption{Traveltime Tomography Algorithm}
+	\label{alg:algo}
+\end{algorithm}
+
+The inversion process starts with an initial velocity model $\mathbf{v}_0$. Forward modeling is performed by the Fast Marching Method ~\cite{s:96}, which solves the eikonal equation on spaced grids by finding the fastest arrivals at grid points. From the derivatives of the predicted times with respect to the background velocity model, forward and adjoint operators are constructed. The operators go into the inner loop that performs the conjugate-direction method updates via cgstep() subroutine written in Fortran 90 ~\cite{c:14}. The subroutine takes the background model, background data residual, gradient in the model space, and the conjugate gradient, and outputs model update and data residual. Then the model update is used to update the background model. Therefore, we can say that the outer part of the framework is performing linearization updates, while the inner part does conjugate gradient iterations.
+
+
+  

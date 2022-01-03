@@ -127,8 +127,9 @@
 % following name should work for both UPPERCASE and LOWERCASE names
 \author{\.{I}sa Eren Y\i{}ld\i{}r\i{}m} 
 % Thesis Title English and Turkish
-\title{Traveltime Tomography Harnessing Physics Informed Neural Networks}
-\turkishtitle{Fizik Bilgili Sinir Ağları Kullanan Seyehat S\"{u}resi Tomografisi}
+\title{Seismic First Arrival Traveltime Inversion Harnessing
+Physics Informed Neural Networks}
+\turkishtitle{Fizik Bilgili Sinir Ağları Kullanarak Sismik \.{I}lk Var{\i}\c{s} Seyahat S\"{u}resi Ters \c{C}\"{o}z\"{u}m\"{u}}
 % Department : English and Turkish
 %
 % Some of the departments are pre-defined, you need not redeclare them. 
@@ -213,8 +214,8 @@
 \affiliationv{Computer Engineering Department, Hacettepe University}
 %
 % Keywords : English & Turkish, Comma seperated
-\keywords{Keyword1, Keyword2, etc.}
-\anahtarklm{Anahtar Kelime 1, Anahtar Kelime 2, vd.}
+\keywords{inverse problems, machine learning, traveltimes, PINN}
+\anahtarklm{ters problemler, makine \"o\u{g}renmesi, seyahat s\"ureleri, FBSA }
 %
 % Abstract in English
 %
@@ -281,6 +282,7 @@
 % unfortunately for this template we need
 \usepackage{caption} % although gives warning of unsopported package.
 \usepackage{subcaption} % although gives warning of unsopported package.
+\usepackage[ruled,vlined]{algorithm2e}
 %%% End of Necessary Packages
 %
 
@@ -362,6 +364,9 @@
 \input{chap_03/discussion}
 \input{chap_04/intro}
 \input{chap_04/area_and_data }
+\input{chap_04/pinn_implementation} 
+\input{chap_04/interpretation} 
+\input{chap_05/intro}
 %\input{chap_03/intro}
 
 
